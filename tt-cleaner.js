@@ -206,7 +206,15 @@
     state.selected.forEach(function (id) { if (!state.done.has(id)) ids.push(id); });
     if (!ids.length) return;
     var label = state.mode === 'like' ? 'Likes' : 'Reposts';
-    if (!confirm(ids.length + ' ' + label + ' wirklich entfernen?')) return;
+    // Bestätigung ohne Popup (Popups können im Browser unterdrückt sein)
+    if (!state.armed) {
+      state.armed = true;
+      $('run').textContent = 'Sicher? Nochmal tippen (' + ids.length + ')';
+      status(ids.length + ' ' + label + ' werden entfernt – zum Bestätigen nochmal tippen.');
+      setTimeout(function () { if (state.armed) { state.armed = false; render(); } }, 5000);
+      return;
+    }
+    state.armed = false;
     state.running = true; state.stop = false; render();
     var okN = 0, failN = 0, backoff = 0;
     for (var i = 0; i < ids.length; i++) {
@@ -259,7 +267,8 @@
       list.forEach(function (t) { if (!state.done.has(t.id)) state.selected.add(t.id); });
       status(state.selected.size + ' Videos ausgewählt. Einzelne antippen zum Abwählen.');
     }
-    if (a === 'run') { render(); return run(); }
+    if (a === 'run') return run();
+    state.armed = false;
     if (a === 'stop') { state.stop = true; status('Stoppe …'); }
     render();
   });
@@ -270,4 +279,5 @@
 
   state.mode = guessMode();
   render();
+  status('Bereit. ' + tiles().length + ' Videos gefunden. Modus: ' + (state.mode === 'like' ? 'Likes' : 'Reposts') + '.');
 })();
