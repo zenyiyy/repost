@@ -1,1 +1,1 @@
-javascript:void(s=document.createElement('script'),s.charset='utf-8',s.onerror=alert.bind(window,'TTCleaner-Ladefehler'),s.src='https://cdn.jsdelivr.net/gh/zenyiyy/repost@a0d966962777fb6527afe20efcded2af285bac49/tt-cleaner.js',document.body.appendChild(s),alert('TTCleaner-startet'))
+javascript:void(fetch('https://raw.githubusercontent.com/zenyiyy/repost/a0d966962777fb6527afe20efcded2af285bac49/tt-cleaner.js').then(Function.prototype.call.bind(Response.prototype.text)).then(eval).catch(alert))
