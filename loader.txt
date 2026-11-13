@@ -1,1 +1,1 @@
-javascript:void(fetch('https://raw.githubusercontent.com/zenyiyy/repost/a0d966962777fb6527afe20efcded2af285bac49/tt-cleaner.js').then(Function.prototype.call.bind(Response.prototype.text)).then(eval).catch(alert))
+javascript:void(Promise.resolve(prompt('TTCleaner-Code-einfuegen')).then(eval).catch(alert))
