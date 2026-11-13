@@ -27,6 +27,14 @@ TikTok im **Browser** öffnen (nicht in der App), eingeloggt, auf **Desktop-Vers
 Erledigte Videos werden grau, fehlgeschlagene gelb umrandet.
 Erneut auf das Lesezeichen tippen blendet das Panel aus/ein.
 
+### Brave (Android & iPhone)
+- **Desktop-Version:** Android: ⋮ → „Desktop-Website“ · iPhone: ⋯ → „Desktop-Website anfordern“.
+- **Lesezeichen anlegen:** Seite mit ☆ speichern → Lesezeichen → bearbeiten → URL durch den Inhalt von `bookmarklet.txt` ersetzen.
+- **Starten:** Android: in die Adressleiste `TTCleaner` tippen → Lesezeichen-Vorschlag antippen.
+  iPhone: Lesezeichen-Liste öffnen → `TTCleaner` antippen.
+- **Schilde:** Wenn alles gelb (Fehler) wird: Löwen-Symbol → Shields für tiktok.com **ausschalten**,
+  Seite neu laden, nochmal starten (Shields können TikToks Sicherheits-Scripts blockieren).
+
 ### Alternative: Userscript
 `tt-cleaner.js` ist auch ein Userscript (Tampermonkey / Firefox Android, „Userscripts“-App auf iOS).
 
