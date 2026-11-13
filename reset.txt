@@ -1,0 +1,1 @@
+javascript:void(localStorage.removeItem('ttc'),alert('TTCleaner-Code-geloescht'))

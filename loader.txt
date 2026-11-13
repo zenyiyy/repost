@@ -1,1 +1,1 @@
-javascript:void(Promise.resolve(prompt('TTCleaner-Code-einfuegen')).then(eval).catch(alert))
+javascript:void(String(localStorage.ttc).length.toString().length==1&&localStorage.setItem('ttc',prompt('TTCleaner-Code-einfuegen')),Promise.resolve(localStorage.ttc).then(eval).catch(alert))

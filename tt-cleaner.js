@@ -217,30 +217,42 @@
     state.armed = false;
     state.running = true; state.stop = false; render();
     var okN = 0, failN = 0, backoff = 0;
-    for (var i = 0; i < ids.length; i++) {
-      if (state.stop) break;
-      var id = ids[i];
-      var res = state.mode === 'like' ? await removeLike(id) : await removeRepost(id);
-      var el = document.querySelector('[data-ttc-id="' + id + '"]');
-      if (ok(res)) {
-        okN++; backoff = 0;
-        state.done.add(id); state.selected.delete(id);
-        if (el) el.classList.remove('ttc-fail');
-      } else {
-        failN++;
-        if (el) el.classList.add('ttc-fail');
-        console.warn('[tt-cleaner] Fehler bei', id, res);
-        if (res.http === 429 || (res.json && /limit|frequent|too many/i.test(JSON.stringify(res.json)))) {
-          backoff = Math.min((backoff || 15000) * 2, 300000);
-          status('Rate-Limit – warte ' + Math.round(backoff / 1000) + ' s …');
-          await sleep(backoff);
-          i--; failN--; // nochmal versuchen
-          continue;
+    // 3 gleichzeitig, kurze Pause zwischen den Runden; bei Rate-Limit automatisch langsamer
+    var BATCH = 3, queue = ids.slice(), slow = false;
+    function isLimit(res) {
+      return res.http === 429 || (res.json && /limit|frequent|too many/i.test(JSON.stringify(res.json)));
+    }
+    while (queue.length && !state.stop) {
+      var batch = queue.splice(0, slow ? 1 : BATCH);
+      var results = await Promise.all(batch.map(function (id) {
+        return (state.mode === 'like' ? removeLike(id) : removeRepost(id)).then(function (res) { return { id: id, res: res }; });
+      }));
+      var limited = false;
+      results.forEach(function (r) {
+        var el = document.querySelector('[data-ttc-id="' + r.id + '"]');
+        if (ok(r.res)) {
+          okN++;
+          state.done.add(r.id); state.selected.delete(r.id);
+          if (el) el.classList.remove('ttc-fail');
+        } else if (isLimit(r.res)) {
+          limited = true; queue.unshift(r.id); // nochmal versuchen
+        } else {
+          failN++;
+          if (el) el.classList.add('ttc-fail');
+          console.warn('[tt-cleaner] Fehler bei', r.id, r.res);
         }
+      });
+      if (limited) {
+        slow = true;
+        backoff = backoff ? Math.min(backoff * 2, 300000) : 15000;
+        status('Rate-Limit – warte ' + Math.round(backoff / 1000) + ' s …');
+        await sleep(backoff);
+        continue;
       }
-      status(label + ': ' + okN + ' entfernt, ' + failN + ' Fehler, ' + (ids.length - i - 1) + ' übrig');
+      backoff = 0;
+      status(label + ': ' + okN + ' entfernt, ' + failN + ' Fehler, ' + queue.length + ' übrig');
       render();
-      await sleep(rand(1200, 2600));
+      if (queue.length) await sleep(slow ? rand(1200, 2000) : rand(400, 900));
     }
     state.running = false;
     status((state.stop ? 'Gestoppt. ' : 'Fertig. ') + okN + ' ' + label + ' entfernt' +
