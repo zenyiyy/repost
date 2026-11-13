@@ -2,6 +2,15 @@
 
 Reposts und Likes auf TikTok **einzeln auswählen** oder **alle auf einmal auswählen** und dann entfernen (ent-reposten / ent-liken).
 
+## Schnellstart (iPhone / Brave – funktioniert)
+TikTok blockiert das Nachladen von fremdem Code, deshalb wird der Code einmal eingefügt und im Browser gespeichert.
+1. Lesezeichen `TTCleaner` mit der URL aus [`loader.txt`](loader.txt) anlegen.
+2. Optional Lesezeichen `TTCleaner-Reset` mit [`reset.txt`](reset.txt) (löscht den gespeicherten Code, z. B. für ein Update).
+3. Auf tiktok.com (Desktop-Website) → Profil → Tab Reposts / Gefällt mir → `TTCleaner` antippen.
+   Beim ersten Mal erscheint ein Eingabefeld: Inhalt von [`tt-cleaner.min.js`](tt-cleaner.min.js) einfügen → OK.
+   Danach startet es direkt ohne Einfügen.
+4. Entfernen: roten Knopf zweimal tippen (Bestätigung). Es werden 3 Videos gleichzeitig entfernt.
+
 ## Benutzung (Handy)
 
 TikTok im **Browser** öffnen (nicht in der App), eingeloggt, auf **Desktop-Version** stellen
